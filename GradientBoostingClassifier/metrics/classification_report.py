@@ -44,3 +44,15 @@ def classification_report(y_true, y_pred):
         }
 
     return report
+
+def print_classification_report(report):
+    # header
+    print(f"{'':<12} {'precision':>10} {'recall':>10} {'f1-score':>10} {'support':>10}")
+
+    # từng class
+    for label, metrics in report.items():
+        print(f"{str(label):<12} "
+              f"{metrics['precision']:>10.2f} "
+              f"{metrics['recall']:>10.2f} "
+              f"{metrics['f1-score']:>10.2f} "
+              f"{metrics['support']:>10}")
