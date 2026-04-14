@@ -37,23 +37,19 @@ def confusion_matrix(y_true, y_pred):
 
     return matrix, labels
 
-
 def plot_confusion_matrix(cm, labels):
     """
     Vẽ confusion matrix bằng matplotlib
     """
-
     plt.figure()
     plt.imshow(cm)
     plt.title("Confusion Matrix")
     plt.colorbar()
 
     tick_marks = np.arange(len(labels))
-
     # label trục X và Y
     plt.xticks(tick_marks, labels)
     plt.yticks(tick_marks, labels)
-
     # ghi số vào từng ô
     for i in range(len(labels)):
         for j in range(len(labels)):
@@ -64,7 +60,6 @@ def plot_confusion_matrix(cm, labels):
                 ha="center",
                 va="center"
             )
-
     plt.ylabel("True label")
     plt.xlabel("Predicted label")
 

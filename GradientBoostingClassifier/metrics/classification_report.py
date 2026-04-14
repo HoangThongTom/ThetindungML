@@ -18,31 +18,23 @@ def classification_report(y_true, y_pred):
 
     # duyệt từng class
     for i, label in enumerate(labels):
-
         # True Positive
         TP = cm[i, i]
-
         # False Positive
         FP = np.sum(cm[:, i]) - TP
-
         # False Negative
         FN = np.sum(cm[i, :]) - TP
-
         # số mẫu thật của class
         support = np.sum(cm[i, :])
-
         # Precision = TP / (TP + FP)
         precision = TP / (TP + FP) if (TP + FP) != 0 else 0
-
-        # Recall = TP / (TP + FN)
+        #Recall = TP / (TP + FN)
         recall = TP / (TP + FN) if (TP + FN) != 0 else 0
-
         # F1-score
         if precision + recall == 0:
             f1 = 0
         else:
             f1 = 2 * precision * recall / (precision + recall)
-
         # lưu vào report
         report[label] = {
             "precision": precision,
