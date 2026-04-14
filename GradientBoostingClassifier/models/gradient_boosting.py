@@ -1,4 +1,4 @@
-class gradient_boosting_classifier:
+class GradientBoostingClassifierCustom:
     
     def __init__(self, n_estimators=100, learning_rate=0.1, max_depth=3):
         self.n_estimators = n_estimators
