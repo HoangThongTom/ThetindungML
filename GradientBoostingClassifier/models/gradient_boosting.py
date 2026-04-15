@@ -1,26 +1,26 @@
 import numpy as np
+from GradientBoostingClassifier.models.decision_tree import RegressionTree
 
-from models.decision_tree import RegressionTree
-<<<<<<< HEAD
-from loss_function import CrossEntropy
-=======
->>>>>>> aa19eed1c3919fac9e022238991d87d3b8ed52dc
 
-# thêm categorical để chuyển đổi nhãn thành one-hot encoding, do code của cả file gần như trốn trơn:((((
 def to_categorical(y):
-    if 
+    """Chuyển nhãn 0/1 thành one-hot encoding (n_samples, n_classes)."""
+    y = np.array(y, dtype=int)
+    n_classes = len(np.unique(y))
+    one_hot = np.zeros((len(y), n_classes))
+    one_hot[np.arange(len(y)), y] = 1
+    return one_hot
+
+
 class GradientBoostingClassifier:
-    def __init__(self, n_estimators=200, learning_rate=0.1, min_samples_split=2, min_info_gain=1e-7, max_depth=2):
+    def __init__(self, n_estimators=50, learning_rate=0.1,
+                 min_samples_split=2, min_info_gain=1e-7, max_depth=3):
 
-        self.n_estimators = n_estimators
-        self.learning_rate = learning_rate
+        self.n_estimators      = n_estimators
+        self.learning_rate     = learning_rate
         self.min_samples_split = min_samples_split
-        self.min_impurity = min_info_gain
-        self.max_depth = max_depth
+        self.min_impurity      = min_info_gain
+        self.max_depth         = max_depth
 
-        self.loss = CrossEntropy()# Loss function for classification
-
-        # Initialize trees
         self.trees = []
         for _ in range(n_estimators):
             tree = RegressionTree(
@@ -30,50 +30,46 @@ class GradientBoostingClassifier:
             )
             self.trees.append(tree)
 
-    def softmax(self, z): # Chuyển đổi logits thành xác suất vs sẽ dùng nhiều nên tách riêng ra tránh lặp
+    def _softmax(self, z):
+        """Chuyển đổi logits thành xác suất."""
         exp_z = np.exp(z - np.max(z, axis=1, keepdims=True))
         return exp_z / np.sum(exp_z, axis=1, keepdims=True)
-    
+
     def fit(self, X, y):
         y = to_categorical(y)
 
         self.init_pred = np.mean(y, axis=0)
         y_pred = np.tile(self.init_pred, (X.shape[0], 1))
 
-        self.train_loss = []    #Lưu trữ loss trong quá trình huấn luyện để nếu cần vẽ biểu đồ sau này
-        for i in self.bar(range(self.n_estimators)):
-            probs = self._softmax(y_pred)
-
+        self.train_loss = []
+        for i in range(self.n_estimators):
+            probs    = self._softmax(y_pred)
             gradient = probs - y
 
             self.trees[i].fit(X, gradient)
 
-            update = self.trees[i].predict(X)
+            update = np.array(self.trees[i].predict(X))
+            if update.ndim == 1:
+                update = np.expand_dims(update, axis=1)
 
             y_pred -= self.learning_rate * update
 
             loss = -np.sum(y * np.log(probs + 1e-15)) / X.shape[0]
             self.train_loss.append(loss)
-    #Bổ sung thêm hàm predict_proba để trả về xác suất dự đoán, và sửa lại hàm predict để sử dụng xác suất này
+
+            if (i + 1) % 10 == 0:
+                print(f"  Estimator {i+1:>3}/{self.n_estimators}  —  loss: {loss:.4f}")
+
     def predict_proba(self, X):
+        """Trả về xác suất dự đoán cho từng class."""
         y_pred = np.tile(self.init_pred, (X.shape[0], 1))
-
         for tree in self.trees:
-            y_pred -= self.learning_rate * tree.predict(X)
-
+            update = np.array(tree.predict(X))
+            if update.ndim == 1:
+                update = np.expand_dims(update, axis=1)
+            y_pred -= self.learning_rate * update
         return self._softmax(y_pred)
 
     def predict(self, X):
         probs = self.predict_proba(X)
         return np.argmax(probs, axis=1)
-    
-    # def predict(self, X): 
-    #     y_pred = np.tile(self.init_pred, (X.shape[0], 1)) 
-    #     for tree in self.trees: 
-    #         y_pred += self.learning_rate * tree.predict(X) 
-    #         exp_pred = np.exp(y_pred - np.max(y_pred, axis=1, keepdims=True)) 
-<<<<<<< HEAD
-    #         probs = exp_pred / np.sum(exp_pred, axis=1, keepdims=True)
-=======
-    #         probs = exp_pred / np.sum(exp_pred, axis=1, keepdims=True)
->>>>>>> aa19eed1c3919fac9e022238991d87d3b8ed52dc
