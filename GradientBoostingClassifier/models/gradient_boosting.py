@@ -35,6 +35,14 @@ class GradientBoostingClassifier:
         exp_z = np.exp(z - np.max(z, axis=1, keepdims=True))
         return exp_z / np.sum(exp_z, axis=1, keepdims=True)
 
+    def _loss_function(self, y, probs):
+        """Tính Cross-Entropy Loss"""
+        return -np.sum(y * np.log(probs + 1e-15)) / y.shape[0]
+
+    def _loss_gradient(self, y, probs):
+        """Tính Gradient của hàm Loss"""
+        return probs - y
+
     def fit(self, X, y):
         y = to_categorical(y)
 
@@ -44,7 +52,7 @@ class GradientBoostingClassifier:
         self.train_loss = []
         for i in range(self.n_estimators):
             probs    = self._softmax(y_pred)
-            gradient = probs - y
+            grandient = self._loss_gradient(y, probs)
 
             self.trees[i].fit(X, gradient)
 
@@ -54,7 +62,7 @@ class GradientBoostingClassifier:
 
             y_pred -= self.learning_rate * update
 
-            loss = -np.sum(y * np.log(probs + 1e-15)) / X.shape[0]
+            loss = self._loss_function(y, probs)
             self.train_loss.append(loss)
 
             if (i + 1) % 10 == 0:
