@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Preprocessing (Người 2 + 3)
 from Preprocessing.preprocess import preprocess, train_test_split
-from Preprocessing.encoding import encode_features
+from Preprocessing.endcoding import encode_features
 
 # Model (Người 1)
 from GradientBoostingClassifier.models.gradient_boosting import GradientBoostingClassifier

@@ -1,27 +1,21 @@
 import numpy as np
 
-def accuracy_score(y_true, y_pred):
-    """
-    Tính độ chính xác (Accuracy)
-    
-    Accuracy = số dự đoán đúng / tổng số mẫu
-    Parameters:
-    y_true : list hoặc array
-        Nhãn thật
-
-    y_pred : list hoặc array
-        Nhãn dự đoán
-    Returns
-    -------
-    float
-        giá trị accuracy từ 0 -> 1
-    """
-    # chuyển về numpy array để xử lý dễ hơn
+def classification_report(y_true, y_pred):
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
-    # đếm số dự đoán đúng
-    correct = np.sum(y_true == y_pred)
-    # tổng số mẫu
-    total = len(y_true)
-    # tính accuracy
-    return correct / total
+
+    tp = np.sum((y_true == 1) & (y_pred == 1))
+    tn = np.sum((y_true == 0) & (y_pred == 0))
+
+    fp = np.sum((y_true == 0) & (y_pred == 1))
+    fn = np.sum((y_true == 1) & (y_pred == 0))
+
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0
+    f1_score = (2 * precision * recall) / (precision + recall) if (precision + recall) > 0 else 0   
+    return {
+        "precision": precision,
+        "recall": recall,
+        "f1_score": f1_score,
+        "support": len(y_true)
+    }
