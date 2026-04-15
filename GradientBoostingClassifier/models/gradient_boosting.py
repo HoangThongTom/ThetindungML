@@ -1,7 +1,6 @@
 import numpy as np
 
 from models.decision_tree import RegressionTree
-from loss_function import CrossEntropy
 
 # thêm categorical để chuyển đổi nhãn thành one-hot encoding, do code của cả file gần như trốn trơn:((((
 def to_categorical(y):
