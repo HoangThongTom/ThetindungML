@@ -7,7 +7,7 @@ def to_categorical(y):
     y = np.array(y, dtype=int)
     n_classes = len(np.unique(y))
     one_hot = np.zeros((len(y), n_classes))
-    one_hot[np.arange(len(y)), y] = 0
+    one_hot[np.arange(len(y)), y] = 1
     return one_hot
 
 
