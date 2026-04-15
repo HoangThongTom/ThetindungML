@@ -1,6 +1,10 @@
 import numpy as np
 
 from models.decision_tree import RegressionTree
+<<<<<<< HEAD
+from loss_function import CrossEntropy
+=======
+>>>>>>> aa19eed1c3919fac9e022238991d87d3b8ed52dc
 
 # thêm categorical để chuyển đổi nhãn thành one-hot encoding, do code của cả file gần như trốn trơn:((((
 def to_categorical(y):
@@ -68,4 +72,8 @@ class GradientBoostingClassifier:
     #     for tree in self.trees: 
     #         y_pred += self.learning_rate * tree.predict(X) 
     #         exp_pred = np.exp(y_pred - np.max(y_pred, axis=1, keepdims=True)) 
+<<<<<<< HEAD
     #         probs = exp_pred / np.sum(exp_pred, axis=1, keepdims=True)
+=======
+    #         probs = exp_pred / np.sum(exp_pred, axis=1, keepdims=True)
+>>>>>>> aa19eed1c3919fac9e022238991d87d3b8ed52dc
