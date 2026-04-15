@@ -23,7 +23,7 @@ def main():
     print("  German Credit Risk — Gradient Boosting Classifier")
     print("=" * 55)
 
-    # ── Load dữ liệu ──────────────────────────────────────────
+    #  Load dữ liệu 
     data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Data", "raw_data.csv")
     df = pd.read_csv(data_path)
     print(f"\nĐã load dữ liệu: {df.shape[0]} mẫu, {df.shape[1]} cột")
@@ -35,7 +35,7 @@ def main():
 
     print(f"Train: {len(X_train)} mẫu  |  Test: {len(X_test)} mẫu")
 
-    # ── Train ─────────────────────────────────────────────────
+    # Train
     print("\nĐang huấn luyện GradientBoostingClassifier...")
     model = GradientBoostingClassifier(
         n_estimators=50,
@@ -45,13 +45,13 @@ def main():
     model.fit(X_train_enc, y_train.to_numpy())
     print("Huấn luyện xong.")
 
-    # ── Predict ───────────────────────────────────────────────
+    #  Predict 
     y_pred    = model.predict(X_test_enc)
     y_test_np = y_test.to_numpy()
 
-    # ── Metrics ───────────────────────────────────────────────
+    #  Metrics
     print("\n" + "=" * 55)
-    print("  KẾT QUẢ ĐÁNH GIÁ")
+    print("  Kết quả đánh giá")
     print("=" * 55)
 
     # 1. Accuracy
@@ -86,7 +86,7 @@ def main():
         save_path="confusion_matrix.png",
     )
 
-    print("\n✓ Hoàn tất! File confusion_matrix.png đã được lưu.")
+    print("\n Hoàn tất! File confusion_matrix.png đã được lưu.")
 
 
 if __name__ == "__main__":
