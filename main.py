@@ -5,8 +5,8 @@ import pandas as pd
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Preprocessing (Người 2 + 3)
-from Preprocessing.Preprocess import preprocess, train_test_split
-from Preprocessing.endcoding import encode_features
+from Preprocessing.preprocess import preprocess, train_test_split
+from Preprocessing.encoding import encode_features
 
 # Model (Người 1)
 from GradientBoostingClassifier.models.gradient_boosting import GradientBoostingClassifier
@@ -23,19 +23,19 @@ def main():
     print("  German Credit Risk — Gradient Boosting Classifier")
     print("=" * 55)
 
-    #  Load dữ liệu 
+    # Load dữ liệu
     data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Data", "raw_data.csv")
     df = pd.read_csv(data_path)
     print(f"\nĐã load dữ liệu: {df.shape[0]} mẫu, {df.shape[1]} cột")
 
-    # ── Preprocess ────────────────────────────────────────────
+    # Preprocess 
     X, y = preprocess(df, target_col="class")
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     X_train_enc, X_test_enc = encode_features(X_train, X_test)
 
     print(f"Train: {len(X_train)} mẫu  |  Test: {len(X_test)} mẫu")
 
-    # Train
+    # Train 
     print("\nĐang huấn luyện GradientBoostingClassifier...")
     model = GradientBoostingClassifier(
         n_estimators=50,
@@ -45,11 +45,11 @@ def main():
     model.fit(X_train_enc, y_train.to_numpy())
     print("Huấn luyện xong.")
 
-    #  Predict 
+    # Predict
     y_pred    = model.predict(X_test_enc)
     y_test_np = y_test.to_numpy()
 
-    #  Metrics
+    # Metrics 
     print("\n" + "=" * 55)
     print("  Kết quả đánh giá")
     print("=" * 55)
