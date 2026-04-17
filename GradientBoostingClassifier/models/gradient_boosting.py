@@ -52,7 +52,7 @@ class GradientBoostingClassifier:
         self.train_loss = []
         for i in range(self.n_estimators):
             probs    = self._softmax(y_pred)
-            grandient = self._loss_gradient(y, probs)
+            gradient = self._loss_gradient(y, probs)
 
             self.trees[i].fit(X, gradient)
 
